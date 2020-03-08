@@ -1,9 +1,6 @@
 const fs = require('fs')
 const csv = require('csv-parser')
 
-let totalNumberOfRows = 0
-let rightGuesses = 0
-
 const parseValues = ({ V1, V2, V3 }) => {
   return {
     v1: parseFloat(V1),
@@ -25,31 +22,52 @@ const guessedRight = (result, expectedValue) => {
   return false
 }
 
-const threshold = (v1, v2) => {
-  // Input values
-  const values = [v1, v2]
-  const weights = [4, 2]
-  // Calculating output values
-  const v = calculateV(values, weights)
-  
-  // Threshold function
+// Threshold function
+const threshold = (v) => {
   if (v >= 2) return 2
   else if (v < 2) return 1
 }
 
+let bestWeights
+let bestAccuracy = 0
+
+const rows = []
+
+// Starting computation
 fs.createReadStream('Aula2-exec1.csv')
   .pipe(csv())
   .on('data', row => {
-    totalNumberOfRows++
-    const { v1, v2, v3 } = parseValues(row)
-    const result = threshold(v1, v2)
-    if (guessedRight(result, v3)) {
-      rightGuesses++
-    }
+    // Reading data from CSV
+    rows.push(row)
   })
   .on('end', () => {
-    console.log(`Total Number of rows (input):`, totalNumberOfRows)
-    console.log(`Number of correct classifications:`, rightGuesses)
-    console.log(`Accuracy:`, rightGuesses/totalNumberOfRows)
+    for (let i = 0; i < 700; i++) {
+      let rightGuesses = 0
+      const weights = [Math.random(), Math.random() * 10]
+      rows.forEach(row => {
+        const { v1, v2, v3 } = parseValues(row)
+        const values = [v1, v2]
+
+        const v = calculateV(values, weights)
+        // Classifying using threshold function
+        const result = threshold(v)
+
+        if (guessedRight(result, v3)) {
+          rightGuesses++
+        }
+
+        const currentAccuracy = rightGuesses / rows.length
+        if (currentAccuracy >= bestAccuracy) {
+          bestAccuracy = currentAccuracy
+          bestWeights = weights
+        }
+      })
+    }
+    console.log(`Best accuracy (${bestAccuracy}) for threshold function was found with weights [${bestWeights}]`)
+
   })
-  
+
+
+
+
+
