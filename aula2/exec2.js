@@ -33,22 +33,21 @@ const guessedRight = (result, expectedValue) => {
 
 // Threshold activation function
 const threshold = (v) => {
-  if (v >= 2) return 2
-  else if (v < 2) return 1
+  if (v > 0) return 2
+  else if (v < 0) return 1
+  else if (v == 0) return 0
 }
 
 // Linear activation function
 const linear = (v) => {
-  const calculated = 0.1 * v
-  if (calculated >= 2) return 2
-  else if (calculated < 2) return 1
+  if (v >= 0.5) return 2
+  else if (v <= -0.5) return 1
+  else if (v > -0.5 && v < 0.5) return v
 }
 
 // Sigmoid activation function
 const sigmoid = (v) => {
-  const calculated = 1 / (1 + mathjs.exp(-v))
-  if (calculated >= 2) return 2
-  else if (calculated < 2) return 1
+  return mathjs.tanh(v)
 }
 
 let bestWeights = {
@@ -65,7 +64,7 @@ let bestAccuracy = {
 
 const rows = []
 
-fs.createReadStream('Aula2-exec1.csv')
+fs.createReadStream('Aula2-exec2.csv')
   .pipe(csv())
   .on('data', row => {
     // Reading data from CSV
@@ -78,16 +77,20 @@ fs.createReadStream('Aula2-exec1.csv')
         linear: 0,
         sigmoid: 0
       }
-      const weights = [Math.random() * 7, Math.random() * 3, Math.random() * 4, Math.random()]
-      rows.forEach(row => {
+      const weights = [Math.random() * 0.56, Math.random() * 1.30, Math.random() * 0.9, Math.random()]
+      rows.forEach((row, idx) => {
         const { v1, v2, v3, v4, v5 } = parseValues(row)
         const values = [v1, v2, v3, v4]
 
         const v = calculateV(values, weights)
+        const biasedV = v - 2.5 * 0.5 // bias = 3.5, biasWeight = 0.5
         // Classifying using threshold function
-        const thresholdResult = threshold(v)
-        const linearResult = linear(v)
-        const sigmoidResult = sigmoid(v)
+        const thresholdResult = threshold(biasedV)
+        const linearResult = linear(biasedV)
+        const sigmoidResult = sigmoid(biasedV)
+
+        // Uncomment line below to print results for each row
+        // console.log(`Results for row ${idx + 1}: Threshold -`, thresholdResult, 'Linear -', linearResult, 'Sigmoid -', sigmoidResult)
 
         // counting right classifications
         if (guessedRight(thresholdResult, v3)) {
