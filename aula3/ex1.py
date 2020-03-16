@@ -1,6 +1,6 @@
 from csv import reader
 import random
-import numpy as np 
+import numpy as np
 from matplotlib import pyplot as plt
 
 # Load a CSV file
@@ -61,11 +61,11 @@ def trainWeightsPerceptron(trainingDataset, learningRate, epochs):
       prediction = activationFuncThreshold(row, weights)
       error = prediction - row[-1]
       currentError += error**2
-      errors.append(currentError)
       # Updating new bias
       weights[0] = weights[0] - (learningRate * error)
       for i in range(len(row)-1):
         weights[i + 1] = weights[i + 1] - (learningRate * row[i] * error)
+    errors.append(currentError)
     print('Epoch=%d, learningRate=%.4f, currentError=%.4f' % (epoch, learningRate, currentError))
     print('weights =', weights)
     print('\n')
@@ -87,6 +87,7 @@ def trainWeightsAdaline(trainingDataset, learningRate, epochs):
       # Update the weights based on the delta rule
       for i in range(len(row)-1):
         weights[i + 1] = weights[i + 1] + (learningRate * row[i] * error)
+    errors.append(currentError)
     print('Epoch=%d, learningRate=%.4f, currentError=%.4f' % (epoch, learningRate, currentError))
     print('weights =', weights)
     print('\n')
@@ -119,10 +120,17 @@ trainDataset = []
 for i in range(0, len(fullDataset), 3):
   trainDataset.append(fullDataset[i])
 
-perceptronPredictions, errors = Perceptron(trainDataset, fullDataset)
-adalinePredictions, errors = Adaline(trainDataset, fullDataset)
+perceptronPredictions, perceptronErrors = Perceptron(trainDataset, fullDataset)
+adalinePredictions, adalineErrors = Adaline(trainDataset, fullDataset)
 
 # Calculating accuracy
 expectedArr = [row[-1] for row in fullDataset]
 print('Perceptron Accuracy: %.4f' % accuracy(expectedArr, perceptronPredictions))
 print('Adaline Accuracy: %.4f' % accuracy(expectedArr, adalinePredictions))
+
+plt.title("Perceptron Error") 
+plt.xlabel("Epoch") 
+plt.ylabel("Error") 
+plt.plot([index for index in range(len(perceptronErrors))],perceptronErrors)
+# plt.plot([index for index in range(len(adalineErrors))],adalineErrors)
+plt.show()
