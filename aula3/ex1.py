@@ -28,7 +28,7 @@ def accuracy(expected, predicted):
 	return correct / float(len(expected)) * 100.0
 
 # Threshold activation function
-def predict(row, weights):
+def activationFuncThreshold(row, weights):
   # bias
 	activation = weights[0]
 	for i in range(len(row)-1):
@@ -36,11 +36,11 @@ def predict(row, weights):
 	return 2.0 if activation >= 0.0 else 1.0
 
 # Estimate Perceptron weights
-def trainWeights(trainingDataset, learningRate, epochs):
+def trainWeightsPerceptron(trainingDataset, learningRate, epochs):
   weights = [0.0 for i in range(len(trainingDataset[0]))]
   for epoch in range(epochs):
     for row in trainingDataset:
-      prediction = predict(row, weights)
+      prediction = activationFuncThreshold(row, weights)
       error = prediction - row[-1]
       # Updating new bias
       weights[0] = weights[0] - (learningRate * error)
@@ -52,10 +52,10 @@ def trainWeights(trainingDataset, learningRate, epochs):
 
 def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 3):
   predictions = list()
-  weights = trainWeights(trainDataset, learningRate, epochs)
+  weights = trainWeightsPerceptron(trainDataset, learningRate, epochs)
 
   for row in testDataset:
-    prediction = predict(row, weights)
+    prediction = activationFuncThreshold(row, weights)
     predictions.append(prediction)
   return predictions
 
