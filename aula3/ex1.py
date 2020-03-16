@@ -1,5 +1,6 @@
 from csv import reader
- 
+import random
+
 # Load a CSV file
 def loadCsv(filename):
   dataset = list()
@@ -37,20 +38,24 @@ def activationFuncThreshold(row, weights):
 
 # Estimate Perceptron weights
 def trainWeightsPerceptron(trainingDataset, learningRate, epochs):
-  weights = [0.0 for i in range(len(trainingDataset[0]))]
+  # Initializing weights with random value
+  weights = [random.randint(0, 30) for i in range(len(trainingDataset[0]))]
   for epoch in range(epochs):
+    currentError = 0
     for row in trainingDataset:
       prediction = activationFuncThreshold(row, weights)
       error = prediction - row[-1]
+      currentError += error**2
       # Updating new bias
       weights[0] = weights[0] - (learningRate * error)
       for i in range(len(row)-1):
         weights[i + 1] = weights[i + 1] - (learningRate * row[i] * error)
-    print('Epoch=%d, learningRate=%.4f' % (epoch, learningRate))
+    print('Epoch=%d, learningRate=%.4f, currentError=%.4f' % (epoch, learningRate, currentError))
     print('weights =', weights)
+    print('\n')
   return weights
 
-def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 3):
+def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 70):
   predictions = list()
   weights = trainWeightsPerceptron(trainDataset, learningRate, epochs)
 
