@@ -46,11 +46,11 @@ def trainWeights(trainingDataset, learningRate, epochs):
       weights[0] = weights[0] - (learningRate * error)
       for i in range(len(row)-1):
         weights[i + 1] = weights[i + 1] - (learningRate * row[i] * error)
-        print('Epoch=%d, learningRate=%.4f' % (epoch, learningRate))
-        print('weights =', weights)
+    print('Epoch=%d, learningRate=%.4f' % (epoch, learningRate))
+    print('weights =', weights)
   return weights
 
-def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 4):
+def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 3):
   predictions = list()
   weights = trainWeights(trainDataset, learningRate, epochs)
 
