@@ -53,7 +53,7 @@ def activationFuncLinear(row, weights):
 # Estimate Perceptron weights
 def trainWeightsPerceptron(trainingDataset, learningRate, epochs):
   # Initializing weights with random value
-  weights = [random.randint(0, 30) for i in range(len(trainingDataset[0]))]
+  weights = [random.randint(0, 15) for i in range(len(trainingDataset[0]))]
   errors = []
   for epoch in range(epochs):
     currentError = 0
@@ -73,7 +73,7 @@ def trainWeightsPerceptron(trainingDataset, learningRate, epochs):
 
 def trainWeightsAdaline(trainingDataset, learningRate, epochs):
   # Initializing weights with random value
-  weights = [random.randint(0, 30) for i in range(len(trainingDataset[0]))]
+  weights = [random.randint(0, 15) for i in range(len(trainingDataset[0]))]
   errors = []
   for epoch in range(epochs):
     currentError = 0
@@ -93,7 +93,7 @@ def trainWeightsAdaline(trainingDataset, learningRate, epochs):
     print('\n')
   return [weights, errors]
 
-def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 70):
+def Perceptron(trainDataset, testDataset, learningRate = 0.03, epochs = 70):
   predictions = list()
   weights, errors = trainWeightsPerceptron(trainDataset, learningRate, epochs)
 
@@ -102,7 +102,7 @@ def Perceptron(trainDataset, testDataset, learningRate = 0.04, epochs = 70):
     predictions.append(prediction)
   return [predictions, errors]
 
-def Adaline(trainDataset, testDataset, learningRate = 0.04, epochs = 80):
+def Adaline(trainDataset, testDataset, learningRate = 0.03, epochs = 70):
   predictions = list()
   weights, errors = trainWeightsAdaline(trainDataset, learningRate, epochs)
 
@@ -128,9 +128,11 @@ expectedArr = [row[-1] for row in fullDataset]
 print('Perceptron Accuracy: %.4f' % accuracy(expectedArr, perceptronPredictions))
 print('Adaline Accuracy: %.4f' % accuracy(expectedArr, adalinePredictions))
 
-plt.title("Perceptron Error") 
 plt.xlabel("Epoch") 
 plt.ylabel("Error") 
-plt.plot([index for index in range(len(perceptronErrors))],perceptronErrors)
-# plt.plot([index for index in range(len(adalineErrors))],adalineErrors)
+plt.title("Perceptron Error") 
+plt.plot([index for index in range(len(perceptronErrors))], perceptronErrors)
+# To plot Adaline graph, uncomment lines below
+# plt.title("Adaline Error") 
+# plt.plot([index for index in range(len(adalineErrors))], adalineErrors)
 plt.show()
