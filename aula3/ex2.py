@@ -1,3 +1,4 @@
+# Nome: Alyson Matheus Maruyama Nascimento - 8532269
 from csv import reader
 import random
 import numpy as np
