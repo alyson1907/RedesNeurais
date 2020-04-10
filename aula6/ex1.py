@@ -31,7 +31,7 @@ y2 = np.array(dados2['V3'])
 X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.7)
 X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.7)
 
-mlp1 = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2))
+mlp1 = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 4))
 mlp1.fit(X1_train, y1_train)
 mlp1_predicted = mlp1.predict(X1_test)
 
@@ -40,7 +40,7 @@ svm1.fit(X1_train, y1_train)
 svm1_predicted = svm1.predict(X1_test)
 
 # Using the same architectures from above but to classify `dados2.csv`
-mlp2 = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2))
+mlp2 = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 4))
 mlp2.fit(X2_train, y2_train)
 mlp2_predicted = mlp2.predict(X2_test)
 
