@@ -18,7 +18,7 @@ y = dataset.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
 
 # First classifier: MLP
-mlp1 = MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 2), activation='logistic', learning_rate='constant', learning_rate_init=0.002)
+mlp1 = MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(5, 3, 3), activation='logistic', learning_rate='constant', learning_rate_init=0.002)
 mlp1.fit(X_train, y_train)
 mlp1_predicted = mlp1.predict(X_test)
 print('\n- MLP1 Accuracy:', metrics.accuracy_score(y_test, mlp1_predicted))
