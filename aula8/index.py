@@ -26,6 +26,7 @@ def convert_and_format_data(x_train, x_test, y_train, y_test):
   x_train = x_train.astype('float32')
   x_test = x_test.astype('float32')
 
+  # Normalizing input
   x_train /= 255
   x_test /= 255
 
@@ -37,7 +38,7 @@ def create_CNN(input_shape):
   # Adding Layers to the CNN
   cnn.add(Conv2D(28, kernel_size=(4,4), input_shape=input_shape))
   cnn.add(MaxPooling2D(pool_size=(2, 2)))
-  cnn.add(Flatten()) # Flattening the 2D arrays for fully connected layers
+  cnn.add(Flatten())
   cnn.add(Dense(128, activation=tf.nn.relu))
   cnn.add(Dropout(0.2))
   cnn.add(Dense(10,activation=tf.nn.softmax))
@@ -62,7 +63,7 @@ for i in range(1, 10):
   cnn = create_CNN(input_shape)
 
   # Training the model for only 2 epochs
-  hist = cnn.fit(x=x_train,y=y_train, epochs=1)
+  hist = cnn.fit(x=x_train,y=y_train, epochs=2)
   # `accs` will contain accuracy metrics from training step
   accs = get_metrics_from_training(hist)
 
