@@ -50,14 +50,13 @@ def get_metrics_from_training(hist):
   # Array: each position is related to a epoch
   epoch_accuracies = hist.history.get('accuracy') 
   epoch_losses = hist.history.get('loss') 
-  print('EPOCK_LOSSESES', epoch_losses)
   return epoch_accuracies, epoch_losses
 
 ################ Main Program ################
 input_shape = (28, 28, 1)
 # Parameters
 train_percentage = 0.4
-epochs = 3
+epochs = 50
 
 x_train, x_test, y_train, y_test = split_train_test(train_percentage)
 x_train, x_test, y_train, y_test = convert_and_format_data(x_train, x_test, y_train, y_test)
@@ -76,11 +75,25 @@ print('Training Loss for each epoch', training_losses)
 print('Final test accuracy', test_acc)
 
 epoch_count = range(1, epochs + 1)
-plt.title('Training Accuracy - CNN')
-plt.plot(epoch_count, training_accs, label='Training Accuracy')
-plt.plot(epoch_count, training_losses, label='Training Losses')
+# `ax` is an array containing each row,
+# and each `ax[row]` contains the columns, which are a `plt.` instance
+fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(6,8))
+subplot1 = ax[0]
+subplot2 = ax[1]
+# Setting only integer values for `epoch` axis
+subplot1.set_xticks(epoch_count)
+subplot2.set_xticks(epoch_count)
+subplot1.set_title('CNN Training Accuracy')
+subplot2.set_title('CNN Training Loss')
+# Setting axes labels
+subplot1.set_xlabel('epoch')
+subplot2.set_xlabel('epoch')
+subplot1.set_ylabel('accuracy')
+subplot2.set_ylabel('loss')
+
+subplot1.plot(epoch_count, training_accs, label='Training Accuracy')
+subplot2.plot(epoch_count, training_losses, label='Training Losses')
 # plt.plot(test_acc, label='Test Accuracy')
-plt.xlabel('epoch')
-plt.ylabel('accuracy')
-plt.legend()
+subplot1.legend()
+subplot2.legend()
 plt.show()
