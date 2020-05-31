@@ -36,7 +36,7 @@ def create_CNN(input_shape):
   # Creating a Sequential Model
   cnn = Sequential()
   # Adding Layers to the CNN
-  cnn.add(Conv2D(28, kernel_size=(4,4), input_shape=input_shape))
+  cnn.add(Conv2D(28, kernel_size=(8,4), input_shape=input_shape))
   cnn.add(MaxPooling2D(pool_size=(2, 2)))
   cnn.add(Flatten())
   cnn.add(Dense(128, activation=tf.nn.relu))
@@ -48,15 +48,16 @@ def create_CNN(input_shape):
 
 def get_metrics_from_training(hist):
   # Array: each position is related to a epoch
-  print(hist.history)
   epoch_accuracies = hist.history.get('accuracy') 
-  return epoch_accuracies
+  epoch_losses = hist.history.get('loss') 
+  print('EPOCK_LOSSESES', epoch_losses)
+  return epoch_accuracies, epoch_losses
 
 ################ Main Program ################
 input_shape = (28, 28, 1)
 # Parameters
 train_percentage = 0.4
-epochs = 10
+epochs = 3
 
 x_train, x_test, y_train, y_test = split_train_test(train_percentage)
 x_train, x_test, y_train, y_test = convert_and_format_data(x_train, x_test, y_train, y_test)
@@ -65,17 +66,20 @@ cnn = create_CNN(input_shape)
 # Training the model for x epochs
 hist = cnn.fit(x=x_train,y=y_train, epochs=epochs)
 # `accs` will contain accuracy metrics from training step
-training_accs = get_metrics_from_training(hist)
+training_accs, training_losses = get_metrics_from_training(hist)
 
 # `test_loss, test_acc` will contain accuracy from test step
 test_loss, test_acc = cnn.evaluate(x_test, y_test)
 
-print('Training accuracy for each epoch', training_accs)
+print('Training Accuracy for each epoch', training_accs)
+print('Training Loss for each epoch', training_losses)
 print('Final test accuracy', test_acc)
 
+epoch_count = range(1, epochs + 1)
 plt.title('Training Accuracy - CNN')
-plt.plot(training_accs, label='Training Accuracy')
-plt.plot(test_acc, label='Test Accuracy')
+plt.plot(epoch_count, training_accs, label='Training Accuracy')
+plt.plot(epoch_count, training_losses, label='Training Losses')
+# plt.plot(test_acc, label='Test Accuracy')
 plt.xlabel('epoch')
 plt.ylabel('accuracy')
 plt.legend()
