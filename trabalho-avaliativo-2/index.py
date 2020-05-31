@@ -56,7 +56,7 @@ def get_metrics_from_training(hist):
 input_shape = (28, 28, 1)
 # Parameters
 train_percentage = 0.4
-epochs = 50
+epochs = 15
 
 x_train, x_test, y_train, y_test = split_train_test(train_percentage)
 x_train, x_test, y_train, y_test = convert_and_format_data(x_train, x_test, y_train, y_test)
